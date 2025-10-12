@@ -10,15 +10,14 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
-# Copy all application files
+# Copy the rest of the application
 COPY . .
 
-# Create directory for SQLite database
+# Create directory for SQLite data
 RUN mkdir -p /app/data
 
 # Expose backend port
 EXPOSE 5000
 
-# Start backend server
+# Start backend
 CMD ["npm", "start"]
-
