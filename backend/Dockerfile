@@ -1,4 +1,4 @@
-# Use Node.js base image
+# Use Node.js 18 on Alpine Linux
 FROM node:18-alpine
 
 # Set working directory
@@ -10,14 +10,14 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the application
+# Copy all source code
 COPY . .
 
-# Create directory for SQLite data
+# Create directory for SQLite database
 RUN mkdir -p /app/data
 
 # Expose backend port
 EXPOSE 5000
 
-# Start backend
+# Start the backend server
 CMD ["npm", "start"]
