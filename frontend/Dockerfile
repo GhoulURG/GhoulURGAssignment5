@@ -1,4 +1,4 @@
-# Stage 1: Build the frontend
+# Build stage
 FROM node:18-alpine AS build
 
 # Set working directory
@@ -16,15 +16,14 @@ COPY . .
 # Build production files
 RUN npm run build
 
-# Stage 2: Serve with nginx
+# Serve stage
 FROM nginx:alpine
 
-# Copy built frontend files to nginx directory
+# Copy built files from previous stage
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Expose port 80
+# Expose port 80 for nginx
 EXPOSE 80
 
-# Run nginx
+# Start nginx
 CMD ["nginx", "-g", "daemon off;"]
-
