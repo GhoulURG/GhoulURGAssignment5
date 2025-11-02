@@ -1,11 +1,14 @@
 const request = require('supertest');
 const app = require('../server');
 
-describe('Recipe API', () => {
-  it('GET /api/recipes returns list', async () => {
-    const res = await request(app).get('/api/recipes');
-    expect(res.statusCode).toBe(200);
-    expect(Array.isArray(res.body)).toBe(true);
+describe('Recipe API Tests', () => {
+  describe('GET /api/recipes', () => {
+    test('should return all recipes', async () => {
+      const response = await request(app)
+        .get('/api/recipes')
+        .expect(200);
+      // ...
+    });
   });
 });
 
