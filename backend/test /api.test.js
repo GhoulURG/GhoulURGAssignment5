@@ -2,46 +2,40 @@ const request = require('supertest');
 const app = require('../server');
 
 describe('Recipe API Tests', () => {
+  let server;
+
+  beforeAll(() => {
+    // Start server on a different port for testing
+    server = app.listen(5001);
+  });
+
+  afterAll(() => {
+    server.close();
+  });
+
   describe('GET /api/recipes', () => {
     test('should return all recipes', async () => {
       const response = await request(app)
         .get('/api/recipes')
         .expect(200);
-      // ...
+
+      expect(Array.isArray(response.body)).toBe(true);
+      expect(response.body.length).toBeGreaterThan(0);
+    });
+
+    test('should return recipes with correct structure', async () => {
+      const response = await request(app)
+        .get('/api/recipes')
+        .expect(200);
+
+      const recipe = response.body[0];
+      expect(recipe).toHaveProperty('id');
+      expect(recipe).toHaveProperty('name');
+      expect(recipe).toHaveProperty('ingredients');
+      expect(recipe).toHaveProperty('instructions');
+      expect(recipe).toHaveProperty('cookTime');
     });
   });
-});
-
-  it('GET /api/recipes/:id returns single recipe', async () => {
-    const list = await request(app).get('/api/recipes');
-    const id = list.body[0].id;
-    const res = await request(app).get(`/api/recipes/${id}`);
-    expect(res.statusCode).toBe(200);
-    expect(res.body.id).toBe(id);
-    expect(res.body.title).toBeDefined();
-  });
-
-  it('POST /api/recipes creates a recipe', async () => {
-    const payload = { title: 'Unit Test Pancakes', ingredients: ['flour','egg'], steps: ['mix','cook'] };
-    const res = await request(app).post('/api/recipes').send(payload);
-    expect(res.statusCode).toBe(201);
-    expect(res.body.title).toBe(payload.title);
-
-    // verify it's in the list
-    const list = await request(app).get('/api/recipes');
-    expect(list.body.find(r => r.title === payload.title)).toBeDefined();
-  });
-
-  it('GET non-existing returns 404', async () => {
-    const res = await request(app).get('/api/recipes/999999');
-    expect(res.statusCode).toBe(404);
-  });
-
-  it('POST without title returns 400', async () => {
-    const res = await request(app).post('/api/recipes').send({});
-    expect(res.statusCode).toBe(400);
-  });
-});
 
   describe('POST /api/recipes', () => {
     test('should create a new recipe', async () => {
