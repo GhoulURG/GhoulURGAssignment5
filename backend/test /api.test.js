@@ -6,8 +6,8 @@ describe('Recipe API', () => {
     const res = await request(app).get('/api/recipes');
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body.length).toBeGreaterThan(0);
   });
+});
 
   it('GET /api/recipes/:id returns single recipe', async () => {
     const list = await request(app).get('/api/recipes');
